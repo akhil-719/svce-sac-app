@@ -1,127 +1,204 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { motion, useMotionValue, useSpring, useTransform, animate } from "framer-motion";
 
-const panels = [
-  {
-    eyebrow: "Est. Excellence",
-    title: "SVCE College",
-    text: "Sri Venkateswara College of Engineering is committed to academic excellence and holistic student development, blending strong technical education with a vibrant campus culture.",
-    stat: { value: "20+", label: "Years of Legacy" },
-    image: "https://wjoltpledptozzlexoqx.supabase.co/storage/v1/object/public/council-images/college.jpg",
-    align: "left",
-  },
-  {
-    eyebrow: "Where Ideas Meet Action",
-    title: "Student Activity Center",
-    text: "SAC coordinates all technical, cultural, and sports activities on campus — empowering students to lead, organize, and participate in events that shape their college journey.",
-    stat: { value: "6", label: "Active Councils" },
-    image: "https://wjoltpledptozzlexoqx.supabase.co/storage/v1/object/public/council-images/SAC.jpg",
-    align: "right",
-  },
+const stats = [
+  { value: 6, suffix: "", label: "Active Councils" },
+  { value: 3500, suffix: "+", label: "Students" },
+  { value: 40, suffix: "+", label: "Years of Legacy" },
+  { value: 100, suffix: "+", label: "Events / Year" },
 ];
 
-function Panel({ panel }: { panel: (typeof panels)[number] }) {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
+function useCountUp(target: number, shouldStart: boolean) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    if (!shouldStart) return;
+    const controls = animate(0, target, {
+      duration: 1.6,
+      ease: [0.22, 1, 0.36, 1],
+      onUpdate: (v) => setValue(Math.floor(v)),
+    });
+    return () => controls.stop();
+  }, [shouldStart, target]);
+  return value;
+}
+
+function TiltCard({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), {
+    stiffness: 200,
+    damping: 20,
+  });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), {
+    stiffness: 200,
+    damping: 20,
   });
 
-  // Image moves slightly slower than the scroll — creates depth (parallax)
-  const imageY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    x.set((e.clientX - rect.left) / rect.width - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
+  }
+
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ scale: 0.995 }}
-      className={`relative rounded-[2.5rem] overflow-hidden min-h-[460px] flex items-center shadow-2xl shadow-black/10 ${
-        panel.align === "right" ? "justify-end" : "justify-start"
-      }`}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ rotateX, rotateY, transformPerspective: 800 }}
+      className={className}
     >
-      {/* Parallax background image */}
-      <motion.img
-        src={panel.image}
-        alt={panel.title}
-        style={{ y: imageY }}
-        className="absolute inset-0 w-full h-[120%] -top-[10%] object-cover"
-      />
+      {children}
+    </motion.div>
+  );
+}
 
-      {/* Gradient scrim */}
-      <div
-        className={`absolute inset-0 ${
-          panel.align === "right"
-            ? "bg-gradient-to-l from-black/85 via-black/50 to-black/10"
-            : "bg-gradient-to-r from-black/85 via-black/50 to-black/10"
-        }`}
-      />
+function StatCard({ stat, delay }: { stat: (typeof stats)[number]; delay: number }) {
+  const [inView, setInView] = useState(false);
+  const count = useCountUp(stat.value, inView);
 
-      {/* Subtle top sheen for extra polish */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-
-      {/* Text content */}
-      <div
-        className={`relative z-10 max-w-md p-10 sm:p-14 ${
-          panel.align === "right" ? "text-right items-end" : "text-left items-start"
-        } flex flex-col`}
-      >
-        <motion.span
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-xs font-semibold tracking-[0.2em] uppercase text-white/70 mb-3"
-        >
-          {panel.eyebrow}
-        </motion.span>
-
-        <motion.h2
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-3xl sm:text-5xl font-bold text-white tracking-tight leading-[1.1]"
-        >
-          {panel.title}
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-4 text-sm sm:text-base text-white/85 leading-relaxed"
-        >
-          {panel.text}
-        </motion.p>
-
-        {/* Floating stat badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-6 inline-flex items-baseline gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-5 py-3"
-        >
-          <span className="text-2xl font-bold text-white">{panel.stat.value}</span>
-          <span className="text-xs text-white/70">{panel.stat.label}</span>
-        </motion.div>
-      </div>
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.5 }}
+      onViewportEnter={() => setInView(true)}
+      transition={{ duration: 0.5, delay }}
+      whileHover={{ y: -4, scale: 1.02 }}
+      className="rounded-[1.5rem] bg-gray-50 border border-gray-100 p-6 flex flex-col justify-center hover:border-gray-300 hover:shadow-lg transition-shadow"
+    >
+      <span className="text-3xl font-bold text-gray-900 tabular-nums">
+        {count.toLocaleString()}
+        {stat.suffix}
+      </span>
+      <span className="text-xs text-gray-500 mt-1">{stat.label}</span>
     </motion.div>
   );
 }
 
 export default function AboutCards() {
+  const marqueeWords = ["SVCE", "SAC", "Technical", "Cultural", "Sports", "Alumni", "NSS"];
+
   return (
-    <div className="mt-24 w-full flex flex-col gap-20 max-w-5xl px-6">
-      {panels.map((panel) => (
-        <Panel key={panel.title} panel={panel} />
-      ))}
+    <div className="mt-28 w-full">
+      {/* Scrolling marquee banner */}
+      <div className="relative w-full overflow-hidden border-y border-gray-100 py-4 mb-16 bg-gray-50/50">
+        <motion.div
+          className="flex gap-8 w-max"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 18, ease: "linear", repeat: Infinity }}
+        >
+          {[...marqueeWords, ...marqueeWords, ...marqueeWords].map((word, i) => (
+            <span
+              key={i}
+              className="text-sm font-semibold tracking-[0.15em] uppercase text-gray-300 flex items-center gap-8"
+            >
+              {word}
+              <span className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+            </span>
+          ))}
+        </motion.div>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12"
+        >
+          <span className="text-xs font-semibold tracking-[0.2em] uppercase text-gray-400">
+            Who We Are
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight mt-3">
+            One College. One Community.
+          </h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* Large tilt card — College */}
+          <TiltCard className="sm:col-span-2 relative rounded-[2rem] bg-gray-950 text-white p-8 sm:p-10 overflow-hidden min-h-[320px] flex flex-col justify-between cursor-default">
+            <motion.div
+              animate={{
+                background: [
+                  "radial-gradient(circle at 30% 20%, rgba(168,85,247,0.35), transparent 50%)",
+                  "radial-gradient(circle at 70% 60%, rgba(236,72,153,0.35), transparent 50%)",
+                  "radial-gradient(circle at 30% 20%, rgba(168,85,247,0.35), transparent 50%)",
+                ],
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute inset-0"
+            />
+            <div className="relative z-10">
+              <span className="text-xs font-semibold tracking-[0.2em] uppercase text-white/50">
+                Est. 1985
+              </span>
+              <h3 className="text-3xl font-bold mt-3 mb-4 tracking-tight">
+                Sri Venkateswara College of Engineering
+              </h3>
+              <p className="text-white/70 leading-relaxed max-w-md">
+                An autonomous, NAAC A+ accredited institution built on four decades
+                of academic rigor — where engineering excellence meets a campus
+                culture that pushes students to build, lead, and grow well beyond
+                the classroom.
+              </p>
+            </div>
+            <div className="relative z-10 flex flex-wrap gap-3 mt-8">
+              <span className="text-xs bg-white/10 border border-white/20 rounded-full px-3 py-1.5">
+                NAAC A+ Accredited
+              </span>
+              <span className="text-xs bg-white/10 border border-white/20 rounded-full px-3 py-1.5">
+                Anna University Affiliated
+              </span>
+            </div>
+          </TiltCard>
+
+          <div className="grid grid-cols-2 sm:grid-cols-1 gap-4">
+            <StatCard stat={stats[0]} delay={0.1} />
+            <StatCard stat={stats[1]} delay={0.18} />
+          </div>
+
+          {/* Gradient tilt card — SAC */}
+          <TiltCard className="sm:col-span-2 relative rounded-[2rem] bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 text-white p-8 sm:p-10 overflow-hidden min-h-[280px] flex flex-col justify-between cursor-default">
+            <div className="relative z-10">
+              <span className="text-xs font-semibold tracking-[0.2em] uppercase text-white/70">
+                Where Ideas Meet Action
+              </span>
+              <h3 className="text-3xl font-bold mt-3 mb-4 tracking-tight">
+                Student Activity Center
+              </h3>
+              <p className="text-white/85 leading-relaxed max-w-md">
+                SAC is the engine behind everything happening outside the
+                classroom — coordinating six councils, hundreds of events, and
+                thousands of students turning ideas into hackathons, fests,
+                tournaments, and everything in between.
+              </p>
+            </div>
+          </TiltCard>
+
+          <div className="grid grid-cols-2 sm:grid-cols-1 gap-4">
+            <StatCard stat={stats[2]} delay={0.26} />
+            <StatCard stat={stats[3]} delay={0.34} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,6 @@
+import Hero from "./components/Hero";
 import HeroCarousel from "./components/HeroCarousel";
+import CouncilShowcase from "./components/CouncilShowcase";
 import AboutCards from "./components/AboutCards";
 
 export default function Home() {
@@ -8,11 +10,9 @@ export default function Home() {
       <div className="absolute top-[20%] right-[-15%] w-[600px] h-[600px] bg-gradient-to-tr from-blue-400/20 via-cyan-300/10 to-transparent blur-3xl rounded-full -z-10" />
       <div className="absolute bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-gradient-to-tr from-orange-400/10 via-pink-300/10 to-transparent blur-3xl rounded-full -z-10" />
 
-      <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 text-center px-6 mb-10">
-        Welcome to SVCE SAC
-      </h1>
-
+      <Hero />
       <HeroCarousel />
+      <CouncilShowcase />
       <AboutCards />
     </main>
   );
