@@ -3,6 +3,7 @@ import HeroSection from "./components/HeroSection";
 import CouncilTabs from "./components/CouncilTabs";
 import EventsList from "./components/EventsList";
 import MemberDirectory from "./components/MemberDirectory";
+import RegisterForm from "./components/RegisterForm";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <CouncilTabs />
       <EventsList />
       <MemberDirectory />
+      <RegisterForm />
     </main>
   );
 }
