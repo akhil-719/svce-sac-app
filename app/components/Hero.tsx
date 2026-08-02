@@ -10,15 +10,14 @@ export default function Hero() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="inline-flex items-center gap-2 bg-gray-100 border border-gray-200 rounded-full px-4 py-1.5 mb-10"
+        className="inline-flex items-center gap-2 bg-white border border-gray-200 rounded-full px-4 py-1.5 mb-8 shadow-sm"
       >
         <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-        <span className="text-xs font-medium text-gray-600 tracking-wide">
-          Student Activity Center · SVCE
+        <span className="text-xs font-semibold text-gray-600 tracking-[0.1em] uppercase">
+          Official Student Activity Center · SVCE
         </span>
       </motion.div>
 
-      {/* Two-tier oversized brand lockup */}
       <div className="flex flex-col items-center leading-none">
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
@@ -38,32 +37,53 @@ export default function Hero() {
         </motion.h1>
       </div>
 
-      {/* Sharper, specific subheadline */}
-      <motion.p
+      {/* Ornamental divider */}
+      <motion.div
+        initial={{ opacity: 0, scaleX: 0 }}
+        animate={{ opacity: 1, scaleX: 1 }}
+        transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="flex items-center gap-3 mt-8 mb-6 w-full max-w-xs"
+      >
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent to-gray-300" />
+        <span className="w-1.5 h-1.5 rotate-45 bg-gray-400" />
+        <div className="h-px flex-1 bg-gradient-to-l from-transparent to-gray-300" />
+      </motion.div>
+
+      {/* Description — about the councils/student experience, styled distinctly */}
+      <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.55 }}
-        className="mt-8 text-base sm:text-xl text-gray-600 max-w-2xl leading-relaxed font-medium"
+        transition={{ duration: 0.6, delay: 0.6 }}
+        className="max-w-2xl"
       >
-        6 councils. 100+ events a year. One place to lead, compete, perform,
-        and build the college experience beyond the classroom.
-      </motion.p>
+        <p className="text-xl sm:text-2xl text-gray-800 leading-snug font-semibold tracking-tight">
+          Empowering Students Life at SVCE
+          <br className="hidden sm:block" /> With Passion,purpose through{" "}
+          <span className="bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">
+            Creativity and Collaboration
+          </span>
+          .
+        </p>
+        <p className="mt-4 text-sm sm:text-base text-gray-500 leading-relaxed max-w-lg mx-auto">
+          One Home for every council,every Event and every Student leader:Technical,Cultural,and Sports and all in one place.
+        </p>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.7 }}
+        transition={{ duration: 0.6, delay: 0.8 }}
         className="mt-10 flex flex-wrap items-center justify-center gap-4"
       >
         <Link
           href="/technical"
-          className="bg-black text-white text-sm font-medium px-7 py-3.5 rounded-full hover:bg-gray-800 transition-all hover:scale-[1.03] active:scale-[0.98]"
+          className="bg-gray-950 text-white text-sm font-semibold px-7 py-3.5 rounded-full hover:bg-gray-800 transition-all hover:scale-[1.03] active:scale-[0.98] shadow-lg shadow-gray-900/20"
         >
           Explore Councils
         </Link>
         <Link
           href="/registration"
-          className="bg-white border border-gray-200 text-gray-900 text-sm font-medium px-7 py-3.5 rounded-full hover:bg-gray-50 transition-all hover:scale-[1.03] active:scale-[0.98]"
+          className="bg-white border border-gray-200 text-gray-900 text-sm font-semibold px-7 py-3.5 rounded-full hover:bg-gray-50 transition-all hover:scale-[1.03] active:scale-[0.98]"
         >
           Register for an Event
         </Link>

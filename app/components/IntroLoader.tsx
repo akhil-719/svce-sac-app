@@ -167,11 +167,10 @@ export default function IntroLoader({ children }: { children: React.ReactNode })
                         delay: 0.6 + i * 0.07,
                         ease: [0.22, 1, 0.36, 1],
                       }}
-                      className={`text-6xl sm:text-8xl font-bold tracking-tight ${
-                        letter === " "
+                      className={`text-6xl sm:text-8xl font-bold tracking-tight ${letter === " "
                           ? "w-4 sm:w-8"
                           : "bg-gradient-to-br from-white via-white to-amber-200 bg-clip-text text-transparent"
-                      }`}
+                        }`}
                       style={{
                         transformStyle: "preserve-3d",
                         display: "inline-block",
@@ -224,8 +223,8 @@ export default function IntroLoader({ children }: { children: React.ReactNode })
       </AnimatePresence>
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ opacity: showIntro ? 0 : 1, scale: showIntro ? 0.98 : 1 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: showIntro ? 0 : 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       >
         {children}

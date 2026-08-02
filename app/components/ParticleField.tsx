@@ -47,7 +47,6 @@ export default function ParticleField() {
         if (p.x < 0 || p.x > width) p.vx *= -1;
         if (p.y < 0 || p.y > height) p.vy *= -1;
 
-        // Gentle pull toward cursor for a "reactive" feel
         const dx = mouse.x - p.x;
         const dy = mouse.y - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
@@ -57,7 +56,6 @@ export default function ParticleField() {
         }
       }
 
-      // Draw connecting lines between nearby particles
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const a = particles[i];
@@ -66,7 +64,7 @@ export default function ParticleField() {
           const dy = a.y - b.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 140) {
-            ctx!.strokeStyle = `rgba(148, 100, 220, ${0.18 * (1 - dist / 140)})`;
+            ctx!.strokeStyle = `rgba(148, 100, 220, ${0.35 * (1 - dist / 140)})`;
             ctx!.lineWidth = 1;
             ctx!.beginPath();
             ctx!.moveTo(a.x, a.y);
@@ -76,11 +74,10 @@ export default function ParticleField() {
         }
       }
 
-      // Draw particles as dots
       for (const p of particles) {
-        ctx!.fillStyle = "rgba(168, 85, 247, 0.45)";
+        ctx!.fillStyle = "rgba(147, 51, 234, 0.7)";
         ctx!.beginPath();
-        ctx!.arc(p.x, p.y, 1.8, 0, Math.PI * 2);
+        ctx!.arc(p.x, p.y, 2.4, 0, Math.PI * 2);
         ctx!.fill();
       }
 
@@ -98,7 +95,7 @@ export default function ParticleField() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 -z-10 pointer-events-none opacity-70"
+      className="absolute inset-0 -z-10 pointer-events-none opacity-70"
     />
   );
 }

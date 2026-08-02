@@ -6,28 +6,28 @@ import Link from "next/link";
 
 const councils = [
   {
+    code: "TLC",
     name: "Technical",
-    href: "/technical",
     tagline: "Build. Break. Ship.",
     description: "Hackathons, coding contests, and tech talks that turn curiosity into real projects.",
     gradient: "from-blue-500 via-cyan-400 to-teal-300",
     glow: "rgba(56,189,248,0.5)",
     icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <polyline points="16 18 22 12 16 6" />
         <polyline points="8 6 2 12 8 18" />
       </svg>
     ),
   },
   {
+    code: "CLC",
     name: "Cultural",
-    href: "/cultural",
     tagline: "Create. Perform. Celebrate.",
     description: "Fests, dance, music, and drama that bring SVCE's creative spirit to the stage.",
     gradient: "from-pink-500 via-rose-400 to-orange-300",
     glow: "rgba(244,114,182,0.5)",
     icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M9 18V5l12-2v13" />
         <circle cx="6" cy="18" r="3" />
         <circle cx="18" cy="16" r="3" />
@@ -35,14 +35,14 @@ const councils = [
     ),
   },
   {
+    code: "SPC",
     name: "Sports",
-    href: "/sports",
     tagline: "Train. Compete. Win.",
     description: "Tournaments, fitness drives, and inter-college matches fueling SVCE's competitive edge.",
     gradient: "from-emerald-500 via-green-400 to-lime-300",
     glow: "rgba(74,222,128,0.5)",
     icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <circle cx="12" cy="12" r="10" />
         <path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z" />
         <path d="M2 12h20" />
@@ -78,16 +78,23 @@ function TiltCard({ council }: { council: (typeof councils)[number] }) {
   }
 
   return (
-    <Link href={council.href}>
+    <Link href={`/${council.name.toLowerCase()}`}>
       <motion.div
         ref={ref}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY, transformPerspective: 900 }}
         whileHover="hover"
-        className="relative rounded-[2rem] overflow-hidden min-h-[360px] p-7 flex flex-col justify-between cursor-pointer bg-gray-950 group"
+        className="relative rounded-[2rem] overflow-hidden min-h-[380px] p-7 flex flex-col justify-between cursor-pointer bg-gray-950 group"
       >
-        {/* Glowing border that appears on hover */}
+        {/* Corner "seal" badge — official touch */}
+        <div className="absolute top-5 right-5 z-20 flex items-center gap-1.5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-full px-3 py-1">
+          <span className="w-1 h-1 rounded-full bg-white/60" />
+          <span className="text-[10px] font-bold tracking-[0.15em] text-white/70 uppercase">
+            {council.code}
+          </span>
+        </div>
+
         <div
           className="absolute inset-0 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
           style={{
@@ -99,7 +106,6 @@ function TiltCard({ council }: { council: (typeof councils)[number] }) {
           }}
         />
 
-        {/* Cursor-tracking spotlight */}
         <motion.div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
           style={{
@@ -110,7 +116,6 @@ function TiltCard({ council }: { council: (typeof councils)[number] }) {
           }}
         />
 
-        {/* Base gradient blob */}
         <motion.div
           variants={{ initial: { scale: 1, opacity: 0.4 }, hover: { scale: 1.3, opacity: 0.7 } }}
           initial="initial"
@@ -140,7 +145,7 @@ function TiltCard({ council }: { council: (typeof councils)[number] }) {
           className="relative z-10 flex items-center gap-2 text-white text-sm font-medium mt-6"
           style={{ transform: "translateZ(40px)" }}
         >
-          Explore
+          Explore Council
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>

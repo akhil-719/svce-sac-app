@@ -1,8 +1,9 @@
 import Hero from "./components/Hero";
 import HeroCarousel from "./components/HeroCarousel";
+import SACIntro from "./components/SACIntro";
 import CouncilShowcase from "./components/CouncilShowcase";
-import AboutCards from "./components/AboutCards";
 import WhySAC from "./components/WhySAC";
+import AboutCards from "./components/AboutCards";
 import AnimatedBackground from "./components/AnimatedBackground";
 import ParticleField from "./components/ParticleField";
 
@@ -13,6 +14,7 @@ export default function Home() {
       <ParticleField />
       <Hero />
       <HeroCarousel />
+      <SACIntro />
       <CouncilShowcase />
       <WhySAC />
       <AboutCards />

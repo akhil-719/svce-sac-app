@@ -5,9 +5,11 @@ import { motion } from "framer-motion";
 const features = [
   {
     title: "Lead Real Teams",
-    description: "Run events, manage budgets, and lead student teams of 10-50 people.",
+    description: "Run events and lead teams of 10-50 people.",
+    color: "text-blue-500",
+    bg: "bg-blue-50",
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
         <circle cx="9" cy="7" r="4" />
         <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
@@ -17,9 +19,11 @@ const features = [
   },
   {
     title: "Build Your Resume",
-    description: "Leadership roles and event ownership that stand out to recruiters.",
+    description: "Leadership roles that stand out to recruiters.",
+    color: "text-pink-500",
+    bg: "bg-pink-50",
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
         <rect x="8" y="2" width="8" height="4" rx="1" />
       </svg>
@@ -27,9 +31,11 @@ const features = [
   },
   {
     title: "Meet Your People",
-    description: "Find your crowd across six councils spanning every interest on campus.",
+    description: "Find your crowd across six councils.",
+    color: "text-amber-500",
+    bg: "bg-amber-50",
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <circle cx="12" cy="8" r="5" />
         <path d="M20 21a8 8 0 1 0-16 0" />
       </svg>
@@ -37,9 +43,11 @@ const features = [
   },
   {
     title: "Compete & Showcase",
-    description: "Hackathons, fests, and tournaments to test what you've built and learned.",
+    description: "Hackathons and fests to test what you've built.",
+    color: "text-emerald-500",
+    bg: "bg-emerald-50",
     icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z" />
         <path d="M5 4H3v2a4 4 0 0 0 4 4M19 4h2v2a4 4 0 0 1-4 4" />
       </svg>
@@ -69,22 +77,18 @@ export default function WhySAC() {
         {features.map((feature, index) => (
           <motion.div
             key={feature.title}
-            initial={{ opacity: 0, y: 25 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-            whileHover={{ y: -6 }}
-            className="bg-white/70 backdrop-blur-md border border-gray-100 rounded-3xl p-6 hover:shadow-xl hover:border-gray-200 transition-shadow"
+            transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+            whileHover={{ y: -4 }}
+            className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow"
           >
-            <div className="w-11 h-11 rounded-2xl bg-gray-900 text-white flex items-center justify-center mb-5">
+            <div className={`w-10 h-10 rounded-xl ${feature.bg} ${feature.color} flex items-center justify-center mb-4`}>
               {feature.icon}
             </div>
-            <h3 className="font-bold text-gray-900 text-sm sm:text-base mb-2">
-              {feature.title}
-            </h3>
-            <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
-              {feature.description}
-            </p>
+            <h3 className="font-bold text-gray-900 text-sm mb-1.5">{feature.title}</h3>
+            <p className="text-xs text-gray-500 leading-relaxed">{feature.description}</p>
           </motion.div>
         ))}
       </div>

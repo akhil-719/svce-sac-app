@@ -98,19 +98,25 @@ export default function AboutCards() {
   return (
     <div className="mt-28 w-full">
       {/* Scrolling marquee banner */}
-      <div className="relative w-full overflow-hidden border-y border-gray-100 py-4 mb-16 bg-gray-50/50">
+      {/* Scrolling marquee banner — bold dark treatment */}
+      <div className="relative w-full overflow-hidden py-8 mb-16 bg-gray-950">
+        {/* Edge fade so text doesn't hard-cut at the container edges */}
+        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-gray-950 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-gray-950 to-transparent z-10 pointer-events-none" />
+
         <motion.div
-          className="flex gap-8 w-max"
+          className="flex gap-12 w-max"
           animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 18, ease: "linear", repeat: Infinity }}
+          transition={{ duration: 22, ease: "linear", repeat: Infinity }}
         >
           {[...marqueeWords, ...marqueeWords, ...marqueeWords].map((word, i) => (
             <span
               key={i}
-              className="text-sm font-semibold tracking-[0.15em] uppercase text-gray-300 flex items-center gap-8"
+              className="text-2xl sm:text-3xl font-black tracking-tight uppercase flex items-center gap-12 bg-gradient-to-r from-white via-white to-gray-500 bg-clip-text text-transparent"
+              style={{ WebkitTextStroke: "0.5px rgba(255,255,255,0.15)" }}
             >
               {word}
-              <span className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+              <span className="w-2 h-2 rotate-45 bg-gradient-to-br from-purple-500 to-pink-500 flex-shrink-0" />
             </span>
           ))}
         </motion.div>
@@ -165,7 +171,7 @@ export default function AboutCards() {
                 NAAC A+ Accredited
               </span>
               <span className="text-xs bg-white/10 border border-white/20 rounded-full px-3 py-1.5">
-                Anna University Affiliated
+                JNTUA University Affiliated
               </span>
             </div>
           </TiltCard>

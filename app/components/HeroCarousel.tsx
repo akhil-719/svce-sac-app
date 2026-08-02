@@ -5,8 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const images = [
   "https://wjoltpledptozzlexoqx.supabase.co/storage/v1/object/public/council-images/college.jpg",
-  "https://wjoltpledptozzlexoqx.supabase.co/storage/v1/object/public/council-images/college2.jpg",
-  "https://wjoltpledptozzlexoqx.supabase.co/storage/v1/object/public/council-images/club.jpg",
+  "https://wjoltpledptozzlexoqx.supabase.co/storage/v1/object/public/council-images/spark.png",
+  "https://wjoltpledptozzlexoqx.supabase.co/storage/v1/object/public/council-images/techspark.png",
+  "https://wjoltpledptozzlexoqx.supabase.co/storage/v1/object/public/council-images/freshersday.png",
+  "https://wjoltpledptozzlexoqx.supabase.co/storage/v1/object/public/council-images/college2.jpg"
 ];
 
 export default function HeroCarousel() {
