@@ -40,15 +40,22 @@ export default function EventsList() {
 
   return (
     <div className="mt-16 w-full max-w-2xl px-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+      <motion.h2
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4 }}
+        className="text-2xl font-bold text-gray-900 mb-6 text-center"
+      >
         Upcoming Events
-      </h2>
+      </motion.h2>
       <div className="grid gap-4">
         {events.map((event, index) => (
           <motion.div
             key={event.id}
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.4, delay: index * 0.1 }}
             className="bg-gray-50 rounded-2xl p-5 shadow-sm"
           >

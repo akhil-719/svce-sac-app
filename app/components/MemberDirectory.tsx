@@ -40,15 +40,22 @@ export default function MemberDirectory() {
 
   return (
     <div className="mt-16 w-full max-w-3xl px-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+      <motion.h2
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4 }}
+        className="text-2xl font-bold text-gray-900 mb-6 text-center"
+      >
         Leadership & Faculty
-      </h2>
+      </motion.h2>
       <div className="grid sm:grid-cols-2 gap-4">
         {members.map((member, index) => (
           <motion.div
             key={member.id}
             initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.4, delay: index * 0.08 }}
             className="bg-white/70 backdrop-blur-md rounded-2xl p-5 shadow-sm border border-gray-100"
           >
