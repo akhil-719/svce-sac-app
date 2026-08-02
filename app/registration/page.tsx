@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import RegistrationClient from "./RegistrationClient";
 
 export const metadata: Metadata = {
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function RegistrationPage() {
-  return <RegistrationClient />;
+  return (
+    <Suspense fallback={<div className="min-h-screen" />}>
+      <RegistrationClient />
+    </Suspense>
+  );
 }
