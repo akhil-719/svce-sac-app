@@ -2,17 +2,19 @@ import Hero from "./components/Hero";
 import HeroCarousel from "./components/HeroCarousel";
 import CouncilShowcase from "./components/CouncilShowcase";
 import AboutCards from "./components/AboutCards";
+import WhySAC from "./components/WhySAC";
+import AnimatedBackground from "./components/AnimatedBackground";
+import ParticleField from "./components/ParticleField";
 
 export default function Home() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center bg-white pb-20 pt-32 overflow-hidden">
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-gradient-to-tr from-purple-500/20 via-pink-500/10 to-transparent blur-3xl rounded-full -z-10" />
-      <div className="absolute top-[20%] right-[-15%] w-[600px] h-[600px] bg-gradient-to-tr from-blue-400/20 via-cyan-300/10 to-transparent blur-3xl rounded-full -z-10" />
-      <div className="absolute bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-gradient-to-tr from-orange-400/10 via-pink-300/10 to-transparent blur-3xl rounded-full -z-10" />
-
+    <main className="relative flex min-h-screen flex-col items-center justify-center pb-20 pt-32 overflow-hidden">
+      <AnimatedBackground />
+      <ParticleField />
       <Hero />
       <HeroCarousel />
       <CouncilShowcase />
+      <WhySAC />
       <AboutCards />
     </main>
   );
