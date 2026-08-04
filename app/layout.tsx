@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import IntroLoader from "./components/IntroLoader";
+import PageTransition from "./components/PageTransition";
 
 export const metadata: Metadata = {
   title: "SVCE SAC | Student Activity Center - SVCE",
@@ -21,7 +22,7 @@ export default function RootLayout({
       <body>
         <IntroLoader>
           <Navbar />
-          {children}
+          <PageTransition>{children}</PageTransition>
           <Footer />
         </IntroLoader>
       </body>

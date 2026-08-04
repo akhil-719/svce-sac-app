@@ -165,11 +165,10 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
               <button
                 key={cat}
                 onClick={() => setActiveFilter(cat)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                  activeFilter === cat
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === cat
                     ? `bg-gradient-to-r ${theme.gradient} text-white`
                     : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50"
-                }`}
+                  }`}
               >
                 {cat}
               </button>
@@ -225,6 +224,9 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
                       <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent" />
                       <span className={`absolute top-3 left-3 bg-gradient-to-r ${theme.gradient} text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg`}>
                         {new Date(event.event_date).toLocaleDateString("en-US", { day: "numeric", month: "short" })}
+                      </span>
+                      <span className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm text-white text-[10px] font-bold tracking-wide uppercase px-2.5 py-1 rounded-full">
+                        {councilCode}
                       </span>
                     </div>
                     <div className="p-5">
