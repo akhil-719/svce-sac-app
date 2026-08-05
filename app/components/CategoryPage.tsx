@@ -4,47 +4,124 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { supabase } from "../../lib/supabaseClient";
-import AnimatedBackground from "./AnimatedBackground";
 
 type Info = { full_name: string; description: string };
 type Member = { id: number; name: string; role: string; photo_url: string };
 type GalleryItem = { id: number; image_url: string; caption: string; category: string };
 type EventItem = { id: number; title: string; event_date: string; venue: string; poster_url: string };
 
-const councilTheme: Record<string, { gradient: string; light: string; accent: string }> = {
-  TLC: { gradient: "from-blue-500 via-cyan-400 to-teal-300", light: "bg-blue-50", accent: "text-blue-600" },
-  CLC: { gradient: "from-pink-500 via-rose-400 to-orange-300", light: "bg-pink-50", accent: "text-pink-600" },
-  SPC: { gradient: "from-emerald-500 via-green-400 to-lime-300", light: "bg-emerald-50", accent: "text-emerald-600" },
+type CouncilThemeData = {
+  name: string;
+  tagline: string;
+  statement: string;
+  statementAccent: string;
+  accentText: string;
+  accentGrad: string;
+  iconColor: string;
+  icon: React.ReactNode;
 };
 
-function GalleryMarquee({ items, onSelect }: { items: GalleryItem[]; onSelect: (item: GalleryItem) => void }) {
-  const [isPaused, setIsPaused] = useState(false);
-  const looped = [...items, ...items];
+const councilTheme: Record<string, CouncilThemeData> = {
+  TLC: {
+    name: "Technical",
+    tagline: "Build. Break. Ship.",
+    statement: "Where curiosity turns into code, and code turns into",
+    statementAccent: "something real",
+    accentText: "text-blue-600",
+    accentGrad: "from-blue-500 via-cyan-400 to-teal-300",
+    iconColor: "text-blue-100",
+    icon: (
+      <svg width="480" height="480" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.4">
+        <polyline points="16 18 22 12 16 6" />
+        <polyline points="8 6 2 12 8 18" />
+      </svg>
+    ),
+  },
+  CLC: {
+    name: "Cultural",
+    tagline: "Create. Perform. Celebrate.",
+    statement: "Where the stage belongs to whoever's brave enough to",
+    statementAccent: "take it",
+    accentText: "text-pink-600",
+    accentGrad: "from-pink-500 via-rose-400 to-orange-300",
+    iconColor: "text-pink-100",
+    icon: (
+      <svg width="480" height="480" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.4">
+        <path d="M9 18V5l12-2v13" />
+        <circle cx="6" cy="18" r="3" />
+        <circle cx="18" cy="16" r="3" />
+      </svg>
+    ),
+  },
+  SPC: {
+    name: "Sports",
+    tagline: "Train. Compete. Win.",
+    statement: "Where discipline meets rivalry, every single",
+    statementAccent: "season",
+    accentText: "text-emerald-600",
+    accentGrad: "from-emerald-500 via-green-400 to-lime-300",
+    iconColor: "text-emerald-100",
+    icon: (
+      <svg width="480" height="480" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.4">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z" />
+        <path d="M2 12h20" />
+      </svg>
+    ),
+  },
+};
+
+function CoverflowGallery({ items, accentGrad, onSelect }: { items: GalleryItem[]; accentGrad: string; onSelect: (item: GalleryItem) => void }) {
+  const [index, setIndex] = useState(0);
+
+  function next() {
+    setIndex((i) => (i + 1) % items.length);
+  }
+  function prev() {
+    setIndex((i) => (i - 1 + items.length) % items.length);
+  }
+  function getOffset(i: number) {
+    let offset = i - index;
+    if (offset > items.length / 2) offset -= items.length;
+    if (offset < -items.length / 2) offset += items.length;
+    return offset;
+  }
 
   return (
-    <div
-      className="relative w-full overflow-hidden py-2"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
-      <motion.div
-        className="flex gap-4 w-max"
-        animate={isPaused ? {} : { x: ["0%", "-50%"] }}
-        transition={{ duration: items.length * 4, ease: "linear", repeat: Infinity }}
-      >
-        {looped.map((item, i) => (
-          <button
-            key={`${item.id}-${i}`}
-            onClick={() => onSelect(item)}
-            className="relative flex-shrink-0 w-56 h-40 rounded-2xl overflow-hidden group/item"
-          >
-            <img src={item.image_url} alt={item.caption} className="w-full h-full object-cover transition-transform duration-300 group-hover/item:scale-110" />
-            <div className="absolute inset-0 bg-black/0 group-hover/item:bg-black/30 transition-colors duration-300 flex items-end p-3">
-              <p className="text-white text-xs opacity-0 group-hover/item:opacity-100 transition-opacity duration-300">{item.caption}</p>
-            </div>
-          </button>
-        ))}
-      </motion.div>
+    <div>
+      <div className="relative h-[340px] sm:h-[400px] flex items-center justify-center" style={{ perspective: 1200 }}>
+        {items.map((item, i) => {
+          const offset = getOffset(i);
+          if (Math.abs(offset) > 2) return null;
+          return (
+            <motion.div
+              key={item.id}
+              animate={{
+                x: offset * 200,
+                scale: offset === 0 ? 1 : 0.75,
+                rotateY: offset * -35,
+                opacity: Math.abs(offset) > 1 ? 0 : 1,
+                zIndex: 10 - Math.abs(offset),
+              }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              onClick={() => (offset === 0 ? onSelect(item) : setIndex(i))}
+              className="absolute w-56 sm:w-72 h-72 sm:h-80 rounded-3xl overflow-hidden cursor-pointer shadow-2xl"
+            >
+              <img src={item.image_url} alt={item.caption} className="w-full h-full object-cover" draggable={false} />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+              {offset === 0 && <p className="absolute bottom-4 left-4 right-4 text-white text-sm font-medium">{item.caption}</p>}
+            </motion.div>
+          );
+        })}
+      </div>
+      <div className="flex items-center justify-center gap-3 mt-6">
+        <button onClick={prev} className="w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6" /></svg>
+        </button>
+        <button onClick={next} className="w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
+        </button>
+      </div>
     </div>
   );
 }
@@ -55,7 +132,6 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
   const [gallery, setGallery] = useState<GalleryItem[]>([]);
   const [events, setEvents] = useState<EventItem[]>([]);
   const [lightboxImage, setLightboxImage] = useState<GalleryItem | null>(null);
-  const [activeFilter, setActiveFilter] = useState("All");
 
   const theme = councilTheme[councilCode] || councilTheme.TLC;
 
@@ -73,173 +149,129 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
       setMembers(memberData || []);
       setGallery(galleryData || []);
       setEvents(eventData || []);
-      setActiveFilter("All");
     }
     fetchAll();
   }, [councilCode]);
-
-  const categories = ["All", ...Array.from(new Set(gallery.map((g) => g.category).filter(Boolean)))];
-  const filteredGallery = activeFilter === "All" ? gallery : gallery.filter((g) => g.category === activeFilter);
 
   const today = new Date().toISOString().split("T")[0];
   const upcomingEvents = events.filter((e) => e.event_date >= today);
   const recentEvents = events.filter((e) => e.event_date < today).reverse();
 
   return (
-    <main className="relative min-h-screen pt-32 pb-20 overflow-hidden">
-      <AnimatedBackground />
+    <main className="relative min-h-screen bg-white overflow-hidden">
+      {/* Full-page watermark icon */}
+      <div className={`fixed inset-0 flex items-center justify-center ${theme.iconColor} pointer-events-none -z-10`}>
+        {theme.icon}
+      </div>
+      <div className={`fixed top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-br ${theme.accentGrad} opacity-[0.06] blur-[130px] rounded-full pointer-events-none -z-10`} />
 
-      {/* Elevated header, matching homepage hero language */}
+      {/* Hero header — same two-tier format as homepage */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="max-w-2xl mx-auto text-center px-6 mb-8"
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        className="max-w-3xl mx-auto text-center px-6 pt-40 pb-20"
       >
-        <span className={`inline-flex items-center gap-2 ${theme.light} ${theme.accent} text-xs font-semibold tracking-[0.15em] uppercase px-4 py-1.5 rounded-full mb-6`}>
-          <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-          {councilCode} · SVCE SAC
+        <span className={`inline-block text-xs font-bold tracking-[0.3em] uppercase ${theme.accentText} mb-5`}>
+          {theme.tagline}
         </span>
 
-        <h1 className="text-5xl sm:text-6xl font-black tracking-tighter text-gray-900 leading-[1.05]">
-          {(info?.full_name || councilCode).split(" ").map((word, i, arr) =>
-            i === arr.length - 1 ? (
-              <span key={i} className={`bg-gradient-to-r ${theme.gradient} bg-clip-text text-transparent`}>
-                {word}
-              </span>
-            ) : (
-              <span key={i}>{word} </span>
-            )
-          )}
+        <h1 className={`text-6xl sm:text-8xl font-black tracking-tighter mb-8 bg-gradient-to-r ${theme.accentGrad} bg-clip-text text-transparent`}>
+          {theme.name}
         </h1>
 
-        <div className="flex items-center gap-3 mt-6 mb-6 w-full max-w-xs mx-auto">
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent to-gray-300" />
-          <span className="w-1.5 h-1.5 rotate-45 bg-gray-400" />
-          <div className="h-px flex-1 bg-gradient-to-l from-transparent to-gray-300" />
-        </div>
-
-        <div className="bg-white/70 backdrop-blur-md border border-white/80 shadow-sm rounded-2xl px-6 py-4">
-          <p className="text-gray-700 leading-relaxed font-medium">{info?.description}</p>
+        <div className="max-w-2xl mx-auto">
+          <p className="text-xl sm:text-2xl text-gray-900 leading-tight font-medium">
+            {theme.statement}{" "}
+            <span className={`italic font-serif bg-gradient-to-r ${theme.accentGrad} bg-clip-text text-transparent`}>
+              {theme.statementAccent}
+            </span>
+            .
+          </p>
+          <p className="mt-5 text-base sm:text-lg text-gray-500 leading-relaxed">
+            {info?.description}
+          </p>
         </div>
       </motion.div>
 
-      {/* Team members */}
+      {/* Team members — elevated cards */}
       {members.length > 0 && (
-        <div className="max-w-4xl mx-auto px-6 mb-20 mt-16">
-          <p className="text-xs font-semibold text-gray-400 tracking-[0.2em] uppercase text-center mb-8">
+        <div className="max-w-4xl mx-auto px-6 mb-24 relative">
+          <p className="text-xs font-semibold text-gray-400 tracking-[0.25em] uppercase text-center mb-10">
             Meet the Team
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
             {members.map((member, index) => (
               <motion.div
                 key={member.id}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.4, delay: index * 0.06 }}
-                whileHover={{ y: -6 }}
-                className="relative flex flex-col items-center text-center bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-shadow group"
+                transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ y: -8 }}
+                className="relative bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-shadow border border-gray-50 group overflow-hidden"
               >
-                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${theme.gradient} opacity-0 group-hover:opacity-[0.06] transition-opacity duration-300`} />
-                <div className="relative w-20 h-20 rounded-full overflow-hidden shadow-md ring-2 ring-white z-10">
-                  <img src={member.photo_url} alt={member.name} className="w-full h-full object-cover" />
+                <div className={`absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br ${theme.accentGrad} opacity-0 group-hover:opacity-20 rounded-full blur-2xl transition-opacity duration-500`} />
+                <div className="relative flex flex-col items-center text-center">
+                  <div className={`relative w-24 h-24 rounded-full p-[3px] bg-gradient-to-br ${theme.accentGrad} mb-4`}>
+                    <div className="w-full h-full rounded-full overflow-hidden bg-white p-[2px]">
+                      <img src={member.photo_url} alt={member.name} className="w-full h-full object-cover rounded-full" />
+                    </div>
+                  </div>
+                  <p className="font-bold text-gray-900 text-sm">{member.name}</p>
+                  <span className={`text-xs font-semibold ${theme.accentText} mt-1`}>{member.role}</span>
                 </div>
-                <p className="relative z-10 mt-3 text-sm font-bold text-gray-900">{member.name}</p>
-                <p className={`relative z-10 text-xs font-medium ${theme.accent}`}>{member.role}</p>
               </motion.div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Gallery */}
+      {/* Gallery — coverflow, matching homepage */}
       {gallery.length > 0 && (
-        <div className="max-w-5xl mx-auto px-6">
-          <p className="text-xs font-semibold text-gray-400 tracking-[0.2em] uppercase text-center mb-6">
+        <div className="max-w-5xl mx-auto px-6 mb-24 relative">
+          <p className="text-xs font-semibold text-gray-400 tracking-[0.25em] uppercase text-center mb-10">
             Gallery
           </p>
-
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveFilter(cat)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${activeFilter === cat
-                    ? `bg-gradient-to-r ${theme.gradient} text-white`
-                    : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50"
-                  }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {activeFilter === "All" ? (
-            <GalleryMarquee items={gallery} onSelect={setLightboxImage} />
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {filteredGallery.map((item, index) => (
-                <motion.button
-                  key={item.id}
-                  onClick={() => setLightboxImage(item)}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.06 }}
-                  whileHover={{ scale: 1.03 }}
-                  className="relative aspect-square overflow-hidden rounded-2xl group"
-                >
-                  <img src={item.image_url} alt={item.caption} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-end p-3">
-                    <p className="text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300">{item.caption}</p>
-                  </div>
-                </motion.button>
-              ))}
-            </div>
-          )}
+          <CoverflowGallery items={gallery} accentGrad={theme.accentGrad} onSelect={setLightboxImage} />
         </div>
       )}
 
       {/* Events */}
       {events.length > 0 && (
-        <div className="max-w-5xl mx-auto px-6 mt-20">
+        <div className="max-w-5xl mx-auto px-6 mb-24 relative">
           {upcomingEvents.length > 0 && (
             <div className="mb-16">
-              <p className="text-xs font-semibold text-gray-400 tracking-[0.2em] uppercase text-center mb-8">
+              <p className="text-xs font-semibold text-gray-400 tracking-[0.25em] uppercase text-center mb-10">
                 Upcoming Events
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {upcomingEvents.map((event, index) => (
                   <motion.div
                     key={event.id}
-                    initial={{ opacity: 0, y: 15 }}
+                    initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.4, delay: index * 0.08 }}
-                    whileHover={{ y: -6 }}
-                    className="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow bg-gray-950 group"
+                    transition={{ duration: 0.5, delay: index * 0.08 }}
+                    whileHover={{ y: -8 }}
+                    className="relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow bg-gray-950 group"
                   >
-                    <div className="relative h-40">
+                    <div className="relative h-44">
                       <img src={event.poster_url} alt={event.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                       <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent" />
-                      <span className={`absolute top-3 left-3 bg-gradient-to-r ${theme.gradient} text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg`}>
+                      <span className={`absolute top-3 left-3 bg-gradient-to-r ${theme.accentGrad} text-gray-950 text-xs font-bold px-3 py-1 rounded-full shadow-lg`}>
                         {new Date(event.event_date).toLocaleDateString("en-US", { day: "numeric", month: "short" })}
                       </span>
-                      <span className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm text-white text-[10px] font-bold tracking-wide uppercase px-2.5 py-1 rounded-full">
-                        {councilCode}
-                      </span>
                     </div>
-                    <div className="p-5">
-                      <p className="font-bold text-white">{event.title}</p>
+                    <div className="p-6">
+                      <p className="font-bold text-white text-lg">{event.title}</p>
                       <p className="text-sm text-white/50 mt-1">{event.venue}</p>
                       <Link
                         href={`/registration?event=${encodeURIComponent(event.title)}&council=${councilCode}`}
-                        className="inline-flex items-center gap-1.5 mt-4 bg-white text-gray-900 text-sm font-semibold px-4 py-2 rounded-full hover:bg-gray-100 transition-all hover:scale-[1.03]"
+                        className="inline-flex items-center gap-1.5 mt-5 bg-white text-gray-900 text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-gray-100 hover:scale-[1.03] transition-all"
                       >
                         Register Now
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                          <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                       </Link>
                     </div>
                   </motion.div>
@@ -250,18 +282,18 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
 
           {recentEvents.length > 0 && (
             <div>
-              <p className="text-xs font-semibold text-gray-400 tracking-[0.2em] uppercase text-center mb-8">
+              <p className="text-xs font-semibold text-gray-400 tracking-[0.25em] uppercase text-center mb-10">
                 Recent Events
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {recentEvents.map((event, index) => (
                   <motion.div
                     key={event.id}
-                    initial={{ opacity: 0, y: 15 }}
+                    initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{ duration: 0.4, delay: index * 0.08 }}
-                    className="relative rounded-2xl overflow-hidden shadow-sm bg-white border border-gray-100"
+                    className="relative rounded-3xl overflow-hidden shadow-md bg-white border border-gray-100"
                   >
                     <div className="relative h-40">
                       <img src={event.poster_url} alt={event.title} className="w-full h-full object-cover grayscale-[40%]" />
@@ -288,16 +320,11 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setLightboxImage(null)}
-            className="fixed inset-0 bg-black/85 z-[100] flex items-center justify-center p-6 cursor-pointer"
+            className="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-6 cursor-zoom-out"
           >
-            <motion.div
-              initial={{ scale: 0.92, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.92, opacity: 0 }}
-              className="max-w-2xl w-full"
-            >
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }} className="max-w-2xl w-full">
               <img src={lightboxImage.image_url} className="w-full rounded-2xl shadow-2xl" />
-              <p className="text-white/80 text-sm text-center mt-4">{lightboxImage.caption}</p>
+              <p className="text-white/80 text-sm mt-4">{lightboxImage.caption}</p>
             </motion.div>
           </motion.div>
         )}
