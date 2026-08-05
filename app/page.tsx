@@ -1,9 +1,11 @@
 import Hero from "./components/Hero";
-import HeroCarousel from "./components/HeroCarousel";
+import QuickNav from "./components/QuickNav";
 import SACIntro from "./components/SACIntro";
 import CouncilShowcase from "./components/CouncilShowcase";
+import DragGallery from "./components/DragGallery";
 import WhySAC from "./components/WhySAC";
-import AboutCards from "./components/AboutCards";
+import Timeline from "./components/Timeline";
+import Testimonials from "./components/Testimonials";
 import AnimatedBackground from "./components/AnimatedBackground";
 import ParticleField from "./components/ParticleField";
 
@@ -13,11 +15,13 @@ export default function Home() {
       <AnimatedBackground />
       <ParticleField />
       <Hero />
-      <HeroCarousel />
+      <QuickNav />
       <SACIntro />
       <CouncilShowcase />
+      <DragGallery />
       <WhySAC />
-      <AboutCards />
+      <Timeline />
+      <Testimonials />
     </main>
   );
 }

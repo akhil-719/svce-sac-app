@@ -76,6 +76,7 @@ export default function IntroLoader({ children }: { children: React.ReactNode })
     };
   }, []);
 
+
   return (
     <>
       <AnimatePresence>
@@ -168,8 +169,8 @@ export default function IntroLoader({ children }: { children: React.ReactNode })
                         ease: [0.22, 1, 0.36, 1],
                       }}
                       className={`text-6xl sm:text-8xl font-bold tracking-tight ${letter === " "
-                          ? "w-4 sm:w-8"
-                          : "bg-gradient-to-br from-white via-white to-amber-200 bg-clip-text text-transparent"
+                        ? "w-4 sm:w-8"
+                        : "bg-gradient-to-br from-white via-white to-amber-200 bg-clip-text text-transparent"
                         }`}
                       style={{
                         transformStyle: "preserve-3d",
