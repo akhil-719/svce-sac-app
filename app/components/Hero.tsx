@@ -54,18 +54,18 @@ export default function Hero() {
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.6 }}
-        className="max-w-2xl"
+        className="max-w-3xl"
       >
-        <p className="text-xl sm:text-2xl text-gray-800 leading-snug font-semibold tracking-tight">
-          Empowering Students Life at SVCE
-          <br className="hidden sm:block" /> With Passion,purpose through{" "}
-          <span className="bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">
-            Creativity and Collaboration
+        <p className="text-2xl sm:text-4xl text-gray-900 leading-tight font-medium">
+          Empowering student life at SVCE with passion and purpose through{" "}
+          <span className="italic font-serif bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">
+            creativity and collaboration
           </span>
           .
         </p>
-        <p className="mt-4 text-sm sm:text-base text-gray-500 leading-relaxed max-w-lg mx-auto">
-          One Home for every council,every Event and every Student leader:Technical,Cultural,and Sports and all in one place.
+        <p className="mt-5 text-base sm:text-lg text-gray-500 leading-relaxed max-w-xl mx-auto">
+          One home for every council, every event, and every student leader —
+          Technical, Cultural, and Sports, all in one place.
         </p>
       </motion.div>
 

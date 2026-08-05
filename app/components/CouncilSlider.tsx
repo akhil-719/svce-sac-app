@@ -1,112 +1,84 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 const councils = [
   {
     name: "Technical",
-    color: "text-blue-600",
-    gradient: "from-blue-500 to-cyan-400",
+    href: "/technical",
+    bg: "bg-gradient-to-br from-blue-950 via-blue-900 to-cyan-900",
+    accent: "text-cyan-300",
     lines: [
       "Where curiosity turns into code, and code turns into something real.",
       "Hackathons that run through the night. Workshops that actually teach.",
       "Guest talks from engineers who've shipped products you've used.",
-      "A team that treats every bug as a puzzle worth solving together.",
       "This is where SVCE's next builders get their start.",
     ],
   },
   {
     name: "Cultural",
-    color: "text-pink-600",
-    gradient: "from-pink-500 to-orange-400",
+    href: "/cultural",
+    bg: "bg-gradient-to-br from-rose-950 via-pink-900 to-orange-900",
+    accent: "text-orange-300",
     lines: [
       "Where the stage belongs to whoever's brave enough to take it.",
       "Fests that take over campus for days at a time.",
       "Dance, music, and drama teams that rehearse like it's a career.",
-      "A community that turns performance into genuine craft.",
       "This is where SVCE's creative spirit gets loud.",
     ],
   },
   {
     name: "Sports",
-    color: "text-emerald-600",
-    gradient: "from-emerald-500 to-lime-400",
+    href: "/sports",
+    bg: "bg-gradient-to-br from-emerald-950 via-green-900 to-lime-900",
+    accent: "text-lime-300",
     lines: [
       "Where discipline meets rivalry, every single season.",
       "Tournaments that pack the ground and the stands alike.",
       "Fitness culture that pushes you past your own expectations.",
-      "A team that trains together and shows up for each other.",
       "This is where SVCE's competitive edge gets sharpened.",
     ],
   },
 ];
 
 export default function CouncilSlider() {
-  const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setDirection(1);
-      setIndex((prev) => (prev + 1) % councils.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
-
-  function goTo(i: number) {
-    setDirection(i > index ? 1 : -1);
-    setIndex(i);
-  }
-
-  const current = councils[index];
-
   return (
-    <div className="mt-28 w-full max-w-3xl px-6">
-      <div className="flex items-center justify-center gap-2 mb-10">
-        {councils.map((c, i) => (
-          <button
-            key={c.name}
-            onClick={() => goTo(i)}
-            className={`text-xs font-semibold uppercase tracking-wide px-4 py-2 rounded-full border transition-all ${
-              i === index ? `${c.color} border-current bg-white shadow-sm` : "text-gray-400 border-transparent hover:text-gray-600"
-            }`}
-          >
-            {c.name}
-          </button>
-        ))}
-      </div>
-
-      <div className="relative min-h-[220px] overflow-hidden">
-        <AnimatePresence mode="wait" custom={direction}>
-          <motion.div
-            key={current.name}
-            custom={direction}
-            initial={{ opacity: 0, x: direction * 60 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: direction * -60 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="text-center"
-          >
-            <h3 className={`text-2xl sm:text-3xl font-black tracking-tight mb-6 bg-gradient-to-r ${current.gradient} bg-clip-text text-transparent`}>
-              {current.name} Council
+    <div className="mt-28 w-full">
+      {councils.map((council, index) => (
+        <motion.div
+          key={council.name}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className={`sticky top-16 ${council.bg} min-h-[420px] flex items-center overflow-hidden`}
+          style={{ zIndex: index + 1 }}
+        >
+          <div className="max-w-3xl mx-auto px-6 py-20 text-center">
+            <span className={`text-xs font-semibold tracking-[0.25em] uppercase ${council.accent} mb-4 block`}>
+              Council {String(index + 1).padStart(2, "0")}
+            </span>
+            <h3 className="text-4xl sm:text-6xl font-black tracking-tight text-white mb-8">
+              {council.name}
             </h3>
-            <div className="flex flex-col gap-2">
-              {current.lines.map((line, i) => (
-                <motion.p
-                  key={i}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.15 + i * 0.08 }}
-                  className="text-sm sm:text-base text-gray-600 leading-relaxed"
-                >
+            <div className="flex flex-col gap-3 mb-10">
+              {council.lines.map((line, i) => (
+                <p key={i} className="text-white/70 text-sm sm:text-base leading-relaxed">
                   {line}
-                </motion.p>
+                </p>
               ))}
             </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+            <Link
+              href={council.href}
+              className="inline-flex items-center gap-2 bg-white text-gray-900 text-sm font-semibold px-7 py-3.5 rounded-full hover:scale-[1.03] transition-transform"
+            >
+              Explore {council.name}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+            </Link>
+          </div>
+        </motion.div>
+      ))}
     </div>
   );
 }

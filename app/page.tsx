@@ -1,6 +1,7 @@
 import Hero from "./components/Hero";
 import CouncilSlider from "./components/CouncilSlider";
 import DragGallery from "./components/DragGallery";
+import UpcomingEventsHome from "./components/UpcomingEventsHome";
 import CouncilShowcase from "./components/CouncilShowcase";
 import Timeline from "./components/Timeline";
 import Testimonials from "./components/Testimonials";
@@ -15,6 +16,7 @@ export default function Home() {
       <Hero />
       <CouncilSlider />
       <DragGallery />
+      <UpcomingEventsHome />
       <CouncilShowcase />
       <Timeline />
       <Testimonials />
