@@ -196,7 +196,7 @@ export default function IntroLoader({ children }: { children: React.ReactNode })
                   transition={{ duration: 0.6, delay: 1.6 }}
                   className="text-white/50 text-sm sm:text-base tracking-[0.35em] uppercase font-medium"
                 >
-                  Student Activity Center
+                  Student Activity Council
                 </motion.p>
               </motion.div>
 

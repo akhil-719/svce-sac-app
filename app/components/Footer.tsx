@@ -63,7 +63,7 @@ export default function Footer() {
               <span className="text-white font-bold text-lg">SVCE SAC</span>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
-              The Student Activity Center at SVCE, coordinating Technical,
+              The Student Activity Council at SVCE, coordinating Technical,
               Cultural, and Sports councils to build a vibrant campus life.
             </p>
           </div>
