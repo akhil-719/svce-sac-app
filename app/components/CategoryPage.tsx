@@ -29,9 +29,9 @@ const councilTheme: Record<string, CouncilThemeData> = {
     statementAccent: "something real",
     accentText: "text-blue-600",
     accentGrad: "from-blue-500 via-cyan-400 to-teal-300",
-    iconColor: "text-blue-100",
+    iconColor: "text-blue-300",
     icon: (
-      <svg width="480" height="480" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.4">
+      <svg width="480" height="480" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
         <polyline points="16 18 22 12 16 6" />
         <polyline points="8 6 2 12 8 18" />
       </svg>
@@ -44,9 +44,9 @@ const councilTheme: Record<string, CouncilThemeData> = {
     statementAccent: "take it",
     accentText: "text-pink-600",
     accentGrad: "from-pink-500 via-rose-400 to-orange-300",
-    iconColor: "text-pink-100",
+    iconColor: "text-pink-300",
     icon: (
-      <svg width="480" height="480" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.4">
+      <svg width="480" height="480" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
         <path d="M9 18V5l12-2v13" />
         <circle cx="6" cy="18" r="3" />
         <circle cx="18" cy="16" r="3" />
@@ -60,9 +60,9 @@ const councilTheme: Record<string, CouncilThemeData> = {
     statementAccent: "season",
     accentText: "text-emerald-600",
     accentGrad: "from-emerald-500 via-green-400 to-lime-300",
-    iconColor: "text-emerald-100",
+    iconColor: "text-emerald-300",
     icon: (
-      <svg width="480" height="480" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.4">
+      <svg width="480" height="480" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
         <circle cx="12" cy="12" r="10" />
         <path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z" />
         <path d="M2 12h20" />
@@ -160,7 +160,7 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
   return (
     <main className="relative min-h-screen bg-white overflow-hidden">
       {/* Full-page watermark icon */}
-      <div className={`absolute inset-0 flex items-center justify-center ${theme.iconColor} pointer-events-none -z-10`}>
+      <div className={`absolute inset-0 flex items-center justify-center opacity-20 ${theme.iconColor} pointer-events-none -z-10`}>
         {theme.icon}
       </div>
       <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-br ${theme.accentGrad} opacity-[0.06] blur-[130px] rounded-full pointer-events-none -z-10`} />
