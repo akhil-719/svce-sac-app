@@ -14,7 +14,7 @@ export default function Hero() {
       >
         <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
         <span className="text-xs font-semibold text-gray-600 tracking-[0.1em] uppercase">
-          Official Student Activity Center · SVCE
+          Official Student Activity Council · SVCE
         </span>
       </motion.div>
 
