@@ -160,10 +160,10 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
   return (
     <main className="relative min-h-screen bg-white overflow-hidden">
       {/* Full-page watermark icon */}
-      <div className={`fixed inset-0 flex items-center justify-center ${theme.iconColor} pointer-events-none -z-10`}>
+      <div className={`absolute inset-0 flex items-center justify-center ${theme.iconColor} pointer-events-none -z-10`}>
         {theme.icon}
       </div>
-      <div className={`fixed top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-br ${theme.accentGrad} opacity-[0.06] blur-[130px] rounded-full pointer-events-none -z-10`} />
+      <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-br ${theme.accentGrad} opacity-[0.06] blur-[130px] rounded-full pointer-events-none -z-10`} />
 
       {/* Hero header — same two-tier format as homepage */}
       <motion.div
