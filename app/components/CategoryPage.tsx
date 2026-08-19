@@ -37,6 +37,65 @@ const councilTheme: Record<string, CouncilThemeData> = {
       </svg>
     ),
   },
+    SMD: {
+    name: "Social Media & Design",
+    tagline: "Create. Post. Amplify.",
+    statement: "Where every event gets a story, and every story gets",
+    statementAccent: "seen",
+    accentText: "text-fuchsia-600",
+    accentGrad: "from-fuchsia-500 via-purple-400 to-indigo-300",
+    iconColor: "text-fuchsia-400",
+    icon: (
+      <svg width="420" height="420" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+        <rect x="2" y="3" width="20" height="14" rx="2" />
+        <path d="M8 21h8M12 17v4" />
+      </svg>
+    ),
+  },
+  NSS: {
+    name: "NSS",
+    tagline: "Serve. Uplift. Connect.",
+    statement: "Where campus energy turns outward, into work that actually",
+    statementAccent: "matters",
+    accentText: "text-amber-600",
+    accentGrad: "from-amber-500 via-yellow-400 to-orange-300",
+    iconColor: "text-amber-400",
+    icon: (
+      <svg width="420" height="420" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+      </svg>
+    ),
+  },
+  HWC: {
+    name: "Health & Wellness",
+    tagline: "Breathe. Balance. Belong.",
+    statement: "Where taking care of yourself is treated like it actually",
+    statementAccent: "matters",
+    accentText: "text-teal-600",
+    accentGrad: "from-teal-500 via-cyan-400 to-sky-300",
+    iconColor: "text-teal-400",
+    icon: (
+      <svg width="420" height="420" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+      </svg>
+    ),
+  },
+  ALC: {
+    name: "Alumni",
+    //href: "/alumni",
+    tagline: "Connect. Guide. Give Back.",
+    statement: "Where the students who came before you become the ones",
+    statementAccent: "guiding you now",
+    accentText: "text-indigo-600",
+    accentGrad: "from-indigo-500 via-blue-400 to-cyan-300",
+    iconColor: "text-indigo-400",
+    icon: (
+      <svg width="420" height="420" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+        <path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z" />
+        <path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5" />
+      </svg>
+    ),
+  },
   CLC: {
     name: "Cultural",
     tagline: "Create. Perform. Celebrate.",
@@ -166,7 +225,7 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
   const recentEvents = events.filter((e) => e.event_date < today).reverse();
 
   return (
-    <main className="relative min-h-screen bg-white overflow-hidden">
+    <main className="relative min-h-screen overflow-hidden">
       {/* Watermark icon — fixed to viewport so it stays put while scrolling, but scoped correctly */}
       <div className={`pointer-events-none fixed inset-0 -z-10 flex items-center justify-center opacity-[0.12] ${theme.iconColor}`}>
         {theme.icon}

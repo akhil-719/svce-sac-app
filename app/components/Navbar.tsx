@@ -10,6 +10,10 @@ const navLinks = [
   { href: "/technical", label: "Technical", grad: "from-blue-500 to-cyan-400" },
   { href: "/cultural", label: "Cultural", grad: "from-pink-500 to-orange-400" },
   { href: "/sports", label: "Sports", grad: "from-emerald-500 to-lime-400" },
+  { href: "/social-media", label: "Social Media", grad: "from-fuchsia-500 to-purple-400" },
+  { href: "/nss", label: "NSS", grad: "from-amber-500 to-yellow-400" },
+  { href: "/wellness", label: "Wellness", grad: "from-teal-500 to-cyan-400" },
+  { href: "/alumni", label: "Alumni", grad: "from-indigo-500 to-blue-400" },
 ];
 
 function MenuIcon({ open }: { open: boolean }) {
