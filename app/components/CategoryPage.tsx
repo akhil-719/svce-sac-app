@@ -29,9 +29,9 @@ const councilTheme: Record<string, CouncilThemeData> = {
     statementAccent: "something real",
     accentText: "text-blue-600",
     accentGrad: "from-blue-500 via-cyan-400 to-teal-300",
-    iconColor: "text-blue-300",
+    iconColor: "text-blue-400",
     icon: (
-      <svg width="480" height="480" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+      <svg width="420" height="420" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
         <polyline points="16 18 22 12 16 6" />
         <polyline points="8 6 2 12 8 18" />
       </svg>
@@ -44,9 +44,9 @@ const councilTheme: Record<string, CouncilThemeData> = {
     statementAccent: "take it",
     accentText: "text-pink-600",
     accentGrad: "from-pink-500 via-rose-400 to-orange-300",
-    iconColor: "text-pink-300",
+    iconColor: "text-pink-400",
     icon: (
-      <svg width="480" height="480" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+      <svg width="420" height="420" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
         <path d="M9 18V5l12-2v13" />
         <circle cx="6" cy="18" r="3" />
         <circle cx="18" cy="16" r="3" />
@@ -60,9 +60,9 @@ const councilTheme: Record<string, CouncilThemeData> = {
     statementAccent: "season",
     accentText: "text-emerald-600",
     accentGrad: "from-emerald-500 via-green-400 to-lime-300",
-    iconColor: "text-emerald-300",
+    iconColor: "text-emerald-400",
     icon: (
-      <svg width="480" height="480" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+      <svg width="420" height="420" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
         <circle cx="12" cy="12" r="10" />
         <path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z" />
         <path d="M2 12h20" />
@@ -71,7 +71,13 @@ const councilTheme: Record<string, CouncilThemeData> = {
   },
 };
 
-function CoverflowGallery({ items, accentGrad, onSelect }: { items: GalleryItem[]; accentGrad: string; onSelect: (item: GalleryItem) => void }) {
+function CoverflowGallery({
+  items,
+  onSelect,
+}: {
+  items: GalleryItem[];
+  onSelect: (item: GalleryItem) => void;
+}) {
   const [index, setIndex] = useState(0);
 
   function next() {
@@ -109,7 +115,9 @@ function CoverflowGallery({ items, accentGrad, onSelect }: { items: GalleryItem[
             >
               <img src={item.image_url} alt={item.caption} className="w-full h-full object-cover" draggable={false} />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-              {offset === 0 && <p className="absolute bottom-4 left-4 right-4 text-white text-sm font-medium">{item.caption}</p>}
+              {offset === 0 && (
+                <p className="absolute bottom-4 left-4 right-4 text-white text-sm font-medium">{item.caption}</p>
+              )}
             </motion.div>
           );
         })}
@@ -159,17 +167,19 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
 
   return (
     <main className="relative min-h-screen bg-white overflow-hidden">
-      {/* Full-page watermark icon */}
-      <div className={`absolute inset-0 flex items-center justify-center opacity-20 ${theme.iconColor} pointer-events-none -z-10`}>
+      {/* Watermark icon — fixed to viewport so it stays put while scrolling, but scoped correctly */}
+      <div className={`pointer-events-none fixed inset-0 -z-10 flex items-center justify-center opacity-[0.12] ${theme.iconColor}`}>
         {theme.icon}
       </div>
-      <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-br ${theme.accentGrad} opacity-[0.06] blur-[130px] rounded-full pointer-events-none -z-10`} />
+      <div
+        className={`pointer-events-none fixed top-1/4 left-1/2 -z-10 h-[700px] w-[700px] -translate-x-1/2 rounded-full bg-gradient-to-br ${theme.accentGrad} opacity-[0.08] blur-[130px]`}
+      />
 
-      {/* Hero header — same two-tier format as homepage */}
+      {/* Hero header */}
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="max-w-3xl mx-auto text-center px-6 pt-40 pb-20"
       >
         <span className={`inline-block text-xs font-bold tracking-[0.3em] uppercase ${theme.accentText} mb-5`}>
@@ -194,21 +204,16 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
         </div>
       </motion.div>
 
-      {/* Team members — elevated cards */}
+      {/* Team members */}
       {members.length > 0 && (
         <div className="max-w-4xl mx-auto px-6 mb-24 relative">
           <p className="text-xs font-semibold text-gray-400 tracking-[0.25em] uppercase text-center mb-10">
             Meet the Team
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-            {members.map((member, index) => (
-              <motion.div
+            {members.map((member) => (
+              <div
                 key={member.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -8 }}
                 className="relative bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-shadow border border-gray-50 group overflow-hidden"
               >
                 <div className={`absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br ${theme.accentGrad} opacity-0 group-hover:opacity-20 rounded-full blur-2xl transition-opacity duration-500`} />
@@ -221,19 +226,19 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
                   <p className="font-bold text-gray-900 text-sm">{member.name}</p>
                   <span className={`text-xs font-semibold ${theme.accentText} mt-1`}>{member.role}</span>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Gallery — coverflow, matching homepage */}
+      {/* Gallery */}
       {gallery.length > 0 && (
         <div className="max-w-5xl mx-auto px-6 mb-24 relative">
           <p className="text-xs font-semibold text-gray-400 tracking-[0.25em] uppercase text-center mb-10">
             Gallery
           </p>
-          <CoverflowGallery items={gallery} accentGrad={theme.accentGrad} onSelect={setLightboxImage} />
+          <CoverflowGallery items={gallery} onSelect={setLightboxImage} />
         </div>
       )}
 
@@ -246,14 +251,9 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
                 Upcoming Events
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {upcomingEvents.map((event, index) => (
-                  <motion.div
+                {upcomingEvents.map((event) => (
+                  <div
                     key={event.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.5, delay: index * 0.08 }}
-                    whileHover={{ y: -8 }}
                     className="relative rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow bg-gray-950 group"
                   >
                     <div className="relative h-44">
@@ -274,7 +274,7 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
                       </Link>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -286,13 +286,9 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
                 Recent Events
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {recentEvents.map((event, index) => (
-                  <motion.div
+                {recentEvents.map((event) => (
+                  <div
                     key={event.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.4, delay: index * 0.08 }}
                     className="relative rounded-3xl overflow-hidden shadow-md bg-white border border-gray-100"
                   >
                     <div className="relative h-40">
@@ -305,7 +301,7 @@ export default function CategoryPage({ councilCode }: { councilCode: string }) {
                       <p className="font-semibold text-gray-900">{event.title}</p>
                       <p className="text-sm text-gray-500 mt-1">{event.venue}</p>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
